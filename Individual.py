@@ -18,7 +18,7 @@ class Individual:
     
     def get_fitness(self):
         if self.fitness==0:
-            self.fitness=sum(1 for i in range(len(self.genes)) if self.genes[i]==(self.solution[i]))
+            self.fitness=sum(1 for i in range(len(self.genes)) if self.genes[i]==int((self.solution[i])))
         
         return self.fitness
 
