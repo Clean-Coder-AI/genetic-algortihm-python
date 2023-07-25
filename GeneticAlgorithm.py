@@ -33,7 +33,7 @@ class SimpleGeneticAlgorithm:
         if SimpleGeneticAlgorithm.elitism:
             new_population.individuals.append(pop.get_fittest().clone())
 
-        for i in range(SimpleGeneticAlgorithm.elitism_offset, pop.size()):
+        for _ in range(SimpleGeneticAlgorithm.elitism_offset, pop.size()):
             indiv1 = self.tournament_selection(pop)
             indiv2 = self.tournament_selection(pop)
             new_indiv=self.crossover(indiv1, indiv2)
