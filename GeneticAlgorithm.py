@@ -1,4 +1,7 @@
 import random
+from Population import Population
+from Individual import Individual
+
 
 class SimpleGeneticAlgorithm:
     generation_count=0
@@ -76,67 +79,14 @@ class SimpleGeneticAlgorithm:
 
 
 
-class Population:
-    def __init__(self, population_size, target_solution, initialize=True):
 
-        self.individuals=[]
-        self.solution=target_solution
-
-        if initialize:
-            for _ in range(population_size):
-                self.individuals.append(Individual(self.solution))
-        
-    def size(self):
-        return len(self.individuals)
-        
-    def get_individuals(self):
-        return self.individuals
-        
-    def get_individual(self,index):
-        return self.individuals[index]
-        
-    def get_fittest(self):
-        return max(self.individuals, key=lambda ind: ind.get_fitness())
 
         
        
-class Individual:
-    def __init__(self, target_solution):
-        self.solution=target_solution
-        self.genes=[random.randint(0,1) for _ in range(len(self.solution))]
-        self.fitness=0
 
-    def get_single_gene(self, index):
-        return self.genes[index]
-
-    def set_single_gene(self, index, value):
-        self.genes[index]=value
-        self.fitness=0
-
-    def default_gene_length(self):
-        return len(self.genes)
-    
-    def get_fitness(self):
-        if self.fitness==0:
-            self.fitness=sum(1 for i in range(len(self.genes)) if self.genes[i]==int(self.solution[i]))
-        
-        return self.fitness
-
-    def __str__(self):
-        return "".join(str(gene) for gene in self.genes)
-    
-    def clone(self):
-        clone=Individual(self.solution)
-        clone.genes=list(self.genes)
-        clone.fitness=self.fitness
-        return clone
     
 
-if __name__=="__main__":
-    population_size=50
-    solution="1011000100000100010000100000100111001000000100000100000000001111"
-    ga=SimpleGeneticAlgorithm(solution, population_size)
-    ga.run_algorithm()
+
     
         
             
