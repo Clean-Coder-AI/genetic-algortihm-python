@@ -1,2 +1,5 @@
-.pytest_cache/
-/__pychache__/
+__pychache__/
+bin/
+*.cfg
+lib/
+include/

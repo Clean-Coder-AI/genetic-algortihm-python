@@ -7,7 +7,7 @@ from itertools import cycle
 
 from unittest.mock import patch
 
-sys.path.append('C:/Users/Sarwe/OneDrive/Desktop/Non-Spaghetti')
+# sys.path.append('C:/Users/Sarwe/OneDrive/Desktop/Non-Spaghetti')
 
 from GeneticAlgorithm.GeneticAlgorithm import SimpleGeneticAlgorithm
 from GeneticAlgorithm.Population import Population
