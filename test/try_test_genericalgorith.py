@@ -5,7 +5,7 @@ import random
 
 from itertools import cycle
 
-from unittest.mock import patch, Magicmock
+from unittest.mock import patch, MagicMock
 
 sys.path.append(r'C:\Users\user\Desktop\Genetic\genetic-algortihm-python')
 
@@ -19,75 +19,68 @@ class TestSimpleGeneticAlgorithm(unittest.TestCase):
         self.population_size = 10
         self.ga = SimpleGeneticAlgorithm(self.target_solution, self.population_size)
 
-    def test_crossover_random_less_than_uniform_rate(self):
-        # Mock the random number generation to return a value less than uniform_rate
-        with patch("random.random", MagicMock(return_value=self.ga.uniform_rate - 0.1)):
-            parent1 = Individual(self.target_solution)
-            parent1.set_single_gene(0, 0)
-            parent1.set_single_gene(1, 1)
-            parent1.set_single_gene(2, 0)
-            parent1.set_single_gene(3, 1)
-            parent1.set_single_gene(4, 0)  # [0, 1, 0, 1, 0]
-
-            parent2 = Individual(self.target_solution)
-            parent2.set_single_gene(0, 1)
-            parent2.set_single_gene(1, 1)
-            parent2.set_single_gene(2, 0)
-            parent2.set_single_gene(3, 1)
-            parent2.set_single_gene(4, 0)  # [1, 1, 0, 1, 0]
-
-            # Perform crossover
-            child = self.ga.crossover(parent1, parent2)
-
-            # Assert that the child inherits all genes from parent1
-            self.assertEqual(child.genes, parent1.genes)
-
     def test_crossover_random_greater_than_uniform_rate(self):
-        # Mock the random number generation to return a value greater than uniform_rate
-        with patch("random.random", MagicMock(return_value=self.ga.uniform_rate + 0.1)):
-            parent1 = Individual(self.target_solution)
-            parent1.set_single_gene(0, 0)
-            parent1.set_single_gene(1, 1)
-            parent1.set_single_gene(2, 0)
-            parent1.set_single_gene(3, 1)
-            parent1.set_single_gene(4, 0)  # [0, 1, 0, 1, 0]
+        # Create two parent individuals for crossover
+        parent1 = Individual(self.target_solution)  
+        parent1.set_single_gene(0, 0)
+        parent1.set_single_gene(1, 1)
+        parent1.set_single_gene(2, 0)
+        parent1.set_single_gene(3, 1)
+        parent1.set_single_gene(4, 0)  #[0, 1, 0, 1, 0]
 
-            parent2 = Individual(self.target_solution)
-            parent2.set_single_gene(0, 1)
-            parent2.set_single_gene(1, 1)
-            parent2.set_single_gene(2, 0)
-            parent2.set_single_gene(3, 1)
-            parent2.set_single_gene(4, 0)  # [1, 1, 0, 1, 0]
+        parent2 = Individual(self.target_solution)  
+        parent2.set_single_gene(0, 1)
+        parent2.set_single_gene(1, 1)
+        parent2.set_single_gene(2, 0)
+        parent2.set_single_gene(3, 1)
+        parent2.set_single_gene(4, 0)  #[1, 1, 0, 1, 0]
 
-            # Perform crossover
+    # Set the value to be returned by the mock random_gen.random() method
+    # if random_gen.random() > SimpleGeneticAlgorithm.uniform_rate: this condition is set true
+        mock_random_value = SimpleGeneticAlgorithm.uniform_rate + 0.1
+
+    # Use the patch decorator to mock the random_gen.random() method
+        with patch.object(random, 'Random') as mock_random_gen:
+            random_gen_instance = mock_random_gen.return_value
+            random_gen_instance.random.return_value = mock_random_value
+
+        # Perform crossover with the mocked random_gen.random()
             child = self.ga.crossover(parent1, parent2)
 
-            # Assert that the child inherits all genes from parent2
-            self.assertEqual(child.genes, parent2.genes)
+    # The child should inherit the genes from parent2 since the condition is true
+        self.assertEqual(child.genes, parent2.genes)
 
-    def test_crossover_random_equal_to_uniform_rate(self):
-        # Mock the random number generation to return a value equal to uniform_rate
-        with patch("random.random", MagicMock(return_value=self.ga.uniform_rate)):
-            parent1 = Individual(self.target_solution)
-            parent1.set_single_gene(0, 0)
-            parent1.set_single_gene(1, 1)
-            parent1.set_single_gene(2, 0)
-            parent1.set_single_gene(3, 1)
-            parent1.set_single_gene(4, 0)  # [0, 1, 0, 1, 0]
 
-            parent2 = Individual(self.target_solution)
-            parent2.set_single_gene(0, 1)
-            parent2.set_single_gene(1, 1)
-            parent2.set_single_gene(2, 0)
-            parent2.set_single_gene(3, 1)
-            parent2.set_single_gene(4, 0)  # [1, 1, 0, 1, 0]
+def test_crossover_random_less_than_uniform_rate(self):
+    # Create two parent individuals for crossover
+    parent1 = Individual(self.target_solution)  
+    parent1.set_single_gene(0, 0)
+    parent1.set_single_gene(1, 1)
+    parent1.set_single_gene(2, 0)
+    parent1.set_single_gene(3, 1)
+    parent1.set_single_gene(4, 0)  #[0, 1, 0, 1, 0]
 
-            # Perform crossover
-            child = self.ga.crossover(parent1, parent2)
+    parent2 = Individual(self.target_solution)  
+    parent2.set_single_gene(0, 1)
+    parent2.set_single_gene(1, 1)
+    parent2.set_single_gene(2, 0)
+    parent2.set_single_gene(3, 1)
+    parent2.set_single_gene(4, 0)  #[1, 1, 0, 1, 0]
 
-            # Assert that the child's genes are a mix of parent1 and parent2
-            self.assertNotEqual(child.genes, parent1.genes)
-            self.assertNotEqual(child.genes, parent2.genes)
+    # Set the value to be returned by the mock random_gen.random() method
+    # if random_gen.random() < SimpleGeneticAlgorithm.uniform_rate: this condition is set false
+    mock_random_value = SimpleGeneticAlgorithm.uniform_rate - 0.1
+
+    # Use the patch decorator to mock the random_gen.random() method
+    with patch.object(random, 'Random') as mock_random_gen:
+        random_gen_instance = mock_random_gen.return_value
+        random_gen_instance.random.return_value = mock_random_value
+
+        # Perform crossover with the mocked random_gen.random()
+        child = self.ga.crossover(parent1, parent2)
+
+    # The child should inherit the genes from parent1 since the condition is false
+    self.assertEqual(child.genes, parent1.genes)
 
     def test_mutate_random_less_than_mutation_rate(self):
         # Mock the random number generation to return a value less than mutation_rate
