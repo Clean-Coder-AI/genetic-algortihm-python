@@ -2,12 +2,10 @@ import os
 import sys
 import unittest
 import random
-
 from itertools import cycle
+from unittest.mock import patch, MagicMock
 
-from unittest.mock import patch
-
-# sys.path.append('C:/Users/Sarwe/OneDrive/Desktop/Non-Spaghetti')
+sys.path.append(r'C:\Users\user\Desktop\Genetic\genetic-algortihm-python')
 
 from GeneticAlgorithm.GeneticAlgorithm import SimpleGeneticAlgorithm
 from GeneticAlgorithm.Population import Population
@@ -19,8 +17,8 @@ class TestSimpleGeneticAlgorithm(unittest.TestCase):
         self.population_size = 10
         self.ga = SimpleGeneticAlgorithm(self.target_solution, self.population_size)
 
-    def test_crossover(self):
-         # Create two parent individuals for crossover
+    def test_crossover_random_greater_than_uniform_rate(self):
+        # Create two parent individuals for crossover
         parent1 = Individual(self.target_solution)  
         parent1.set_single_gene(0, 0)
         parent1.set_single_gene(1, 1)
@@ -33,24 +31,56 @@ class TestSimpleGeneticAlgorithm(unittest.TestCase):
         parent2.set_single_gene(1, 1)
         parent2.set_single_gene(2, 0)
         parent2.set_single_gene(3, 1)
-        parent2.set_single_gene(4, 0) #[1, 1, 0, 1, 0]
+        parent2.set_single_gene(4, 0)  #[1, 1, 0, 1, 0]
 
-        # Set the value to be returned by the mock random_gen.random() method
-        # if random_gen.random()<SimpleGeneticAlgorithm.uniform_rate: this condition is set false
+    # Set the value to be returned by the mock random_gen.random() method
+    # if random_gen.random() > SimpleGeneticAlgorithm.uniform_rate: this condition is set true
         mock_random_value = SimpleGeneticAlgorithm.uniform_rate + 0.1
 
-        # Use the patch decorator to mock the random_gen.random() method
+    # Use the patch decorator to mock the random_gen.random() method
         with patch.object(random, 'Random') as mock_random_gen:
             random_gen_instance = mock_random_gen.return_value
             random_gen_instance.random.return_value = mock_random_value
 
-            # Perform crossover with the mocked random_gen.random()
+        # Perform crossover with the mocked random_gen.random()
             child = self.ga.crossover(parent1, parent2)
 
-        # The child should inherit the genes from parent2 since the condition is always false
+    # The child should inherit the genes from parent2 since the condition is true
         self.assertEqual(child.genes, parent2.genes)
 
-    def test_mutate(self):
+
+def test_crossover_random_less_than_uniform_rate(self):
+    # Create two parent individuals for crossover
+    parent1 = Individual(self.target_solution)  
+    parent1.set_single_gene(0, 0)
+    parent1.set_single_gene(1, 1)
+    parent1.set_single_gene(2, 0)
+    parent1.set_single_gene(3, 1)
+    parent1.set_single_gene(4, 0)  #[0, 1, 0, 1, 0]
+
+    parent2 = Individual(self.target_solution)  
+    parent2.set_single_gene(0, 1)
+    parent2.set_single_gene(1, 1)
+    parent2.set_single_gene(2, 0)
+    parent2.set_single_gene(3, 1)
+    parent2.set_single_gene(4, 0)  #[1, 1, 0, 1, 0]
+
+    # Set the value to be returned by the mock random_gen.random() method
+    # if random_gen.random() < SimpleGeneticAlgorithm.uniform_rate: this condition is set false
+    mock_random_value = SimpleGeneticAlgorithm.uniform_rate - 0.1
+
+    # Use the patch decorator to mock the random_gen.random() method
+    with patch.object(random, 'Random') as mock_random_gen:
+        random_gen_instance = mock_random_gen.return_value
+        random_gen_instance.random.return_value = mock_random_value
+
+        # Perform crossover with the mocked random_gen.random()
+        child = self.ga.crossover(parent1, parent2)
+
+    # The child should inherit the genes from parent1 since the condition is false
+    self.assertEqual(child.genes, parent1.genes)
+
+    def test_mutate_random_less_than_mutation_rate(self):
         # Create an individual for mutation
         individual = Individual(self.target_solution)  
         individual.set_single_gene(0, 0)
@@ -59,18 +89,43 @@ class TestSimpleGeneticAlgorithm(unittest.TestCase):
         individual.set_single_gene(3, 1)
         individual.set_single_gene(4, 0)  #[0, 1, 1, 1, 0]
 
-        # Set the value to be returned by the mock random_gen.random() method
+    # Set the value to be returned by the mock random_gen.random() method
         mock_random_value = SimpleGeneticAlgorithm.mutation_rate - 0.1
 
-        # Use the patch decorator to mock the random_gen.random() method
+    # Use the patch decorator to mock the random_gen.random() method
         with patch.object(random, 'Random') as mock_random_gen:
             random_gen_instance = mock_random_gen.return_value
             random_gen_instance.random.return_value = mock_random_value
 
-            # Perform mutation with the mocked random_gen.random()
+        # Perform mutation with the mocked random_gen.random()
             self.ga.mutate(individual)
 
-        # All genes should be flipped since the condition is always true
+    # No gene should be flipped since the condition is false
+        expected_genes = [0, 1, 1, 1, 0]
+        self.assertEqual(individual.genes, expected_genes)
+
+
+    def test_mutate_random_greater_than_mutation_rate(self):
+    # Create an individual for mutation
+        individual = Individual(self.target_solution)  
+        individual.set_single_gene(0, 0)
+        individual.set_single_gene(1, 1)
+        individual.set_single_gene(2, 1)
+        individual.set_single_gene(3, 1)
+        individual.set_single_gene(4, 0)  #[0, 1, 1, 1, 0]
+
+    # Set the value to be returned by the mock random_gen.random() method
+        mock_random_value = SimpleGeneticAlgorithm.mutation_rate + 0.1
+
+    # Use the patch decorator to mock the random_gen.random() method
+        with patch.object(random, 'Random') as mock_random_gen:
+            random_gen_instance = mock_random_gen.return_value
+            random_gen_instance.random.return_value = mock_random_value
+
+        # Perform mutation with the mocked random_gen.random()
+            self.ga.mutate(individual)
+
+    # All genes should be flipped since the condition is true
         expected_genes = [1, 0, 0, 0, 1]
         self.assertEqual(individual.genes, expected_genes)
 
@@ -80,6 +135,10 @@ class TestSimpleGeneticAlgorithm(unittest.TestCase):
         population.get_individual(0).set_single_gene(0, 0)
         population.get_individual(1).set_single_gene(0, 0)
         population.get_individual(2).set_single_gene(0, 1)
+        population.get_individual(2).set_single_gene(1, 0)
+        population.get_individual(2).set_single_gene(2, 1)
+        population.get_individual(2).set_single_gene(3, 0)
+        population.get_individual(2).set_single_gene(4, 1)
         population.get_individual(3).set_single_gene(0, 0)
         population.get_individual(4).set_single_gene(0, 0)
 
@@ -91,14 +150,12 @@ class TestSimpleGeneticAlgorithm(unittest.TestCase):
             random_gen_instance = mock_random_gen.return_value
             random_gen_instance.randint.side_effect = lambda a, b: next(mock_random_values)
 
-            # Perform tournament selection with the mocked random_gen.randint()
             tournament_winner = self.ga.tournament_selection(population)
 
-        # The tournament winner should be the individual with the highest fitness (gene value = 1),
-        # which is the third individual in this case
-        third_individual_genes = population.get_individual(2).genes
-        tournament_winner_genes = tournament_winner.genes
-        self.assertTrue(tournament_winner_genes == third_individual_genes)
+            # The tournament winner should be the individual with the highest fitness (gene value = 1)
+            third_individual_genes = population.get_individual(2).genes
+            tournament_winner_genes = tournament_winner.genes
+            self.assertEqual(tournament_winner_genes, third_individual_genes)
 
     def test_run_algorithm(self):
         pass
