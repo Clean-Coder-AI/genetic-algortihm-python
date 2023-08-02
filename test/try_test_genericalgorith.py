@@ -5,7 +5,7 @@ import random
 
 from itertools import cycle
 
-from unittest.mock import patch
+from unittest.mock import patch, Magicmock
 
 sys.path.append(r'C:\Users\user\Desktop\Genetic\genetic-algortihm-python')
 
