@@ -16,11 +16,18 @@ class HotColdAlgorithm:
         self.solution_length = target_solution_length
         self.population_size = population_size
         self.current_environment = random.randint(0, 1)  # Initialize the environment randomly as hot (0) or cold (1)
+        self.hot_count = 0
+        self.cold_count = 0
 
     def switch_environment(self):
         generated_number = random.randint(0, 1)
+        if self.current_environment == 0:
+            self.hot_count += 1
+        else:
+            self.cold_count += 1 
         if generated_number == 1:
             self.current_environment = 1 - self.current_environment #Switch between hot(0) or cold(1)
+           
 
     def run_algorithm(self, num_generations=100):
         self.my_pop = self.initialize_population()
@@ -39,6 +46,8 @@ class HotColdAlgorithm:
         print(f"Best Genes: {self.my_pop.get_fittest(self.current_environment)}")
         print(f"Environment: {'Hot' if self.current_environment == 0 else 'Cold'}")
         print(f"Fitness: {self.my_pop.get_fittest(self.current_environment).get_fitness(self.current_environment)}/{self.solution_length}")
+        print(f"Number of Hot Environments: {self.hot_count}/{num_generations}")
+        print(f"Number of Cold Environments: {self.cold_count}/{num_generations}")
 
 
     def initialize_population(self):
