@@ -47,7 +47,7 @@ class HotColdAlgorithm:
             print("-----------------------------------------------------------------------------")
             print(f"Best Genes: {self.my_pop.get_fittest(self.current_environment)}")
             print(f"Environment: {'Hot' if self.current_environment == 0 else 'Cold'}")
-            print(f"Fitness: {self.my_pop.get_fittest(self.current_environment).get_fitness(self.current_environment)}/{self.solution_length}", flush=True)
+            print(f"Fitness: {self.my_pop.get_fittest(self.current_environment).get_fitness(self.current_environment)}/{self.solution_length}")
 
 
 
