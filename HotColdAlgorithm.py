@@ -29,25 +29,26 @@ class HotColdAlgorithm:
             self.current_environment = 1 - self.current_environment #Switch between hot(0) or cold(1)
            
 
-    def run_algorithm(self, num_generations=100):
+    def run_algorithm(self, num_generations=100, print_stats=False):
         self.my_pop = self.initialize_population()
 
         for _ in range(num_generations):
-            print(f"Generation: {self.generation_count} "
-                  f"Fitness: {self.my_pop.get_fittest(self.current_environment).get_fitness(self.current_environment)}/{self.solution_length} "
-                  f"Environment: {' Hot' if self.current_environment == 0 else 'Cold'} "
-                  f"Genes: {self.my_pop.get_fittest(self.current_environment)}")
+            if print_stats:
+                    print(f"Generation: {self.generation_count} "
+                    f"Fitness: {self.my_pop.get_fittest(self.current_environment).get_fitness(self.current_environment)}/{self.solution_length} "
+                    f"Environment: {' Hot' if self.current_environment == 0 else 'Cold'} "
+                    f"Genes: {self.my_pop.get_fittest(self.current_environment)}")
 
             self.evolve_population()
             self.generation_count += 1
-            self.switch_environment()  # Randomly switch environment after each generation
+            self.switch_environment()
 
-        print("-----------------------------------------------------------------------------")
-        print(f"Best Genes: {self.my_pop.get_fittest(self.current_environment)}")
-        print(f"Environment: {'Hot' if self.current_environment == 0 else 'Cold'}")
-        print(f"Fitness: {self.my_pop.get_fittest(self.current_environment).get_fitness(self.current_environment)}/{self.solution_length}")
-        print(f"Number of Hot Environments: {self.hot_count}/{num_generations}")
-        print(f"Number of Cold Environments: {self.cold_count}/{num_generations}")
+        if print_stats:
+            print("-----------------------------------------------------------------------------")
+            print(f"Best Genes: {self.my_pop.get_fittest(self.current_environment)}")
+            print(f"Environment: {'Hot' if self.current_environment == 0 else 'Cold'}")
+            print(f"Fitness: {self.my_pop.get_fittest(self.current_environment).get_fitness(self.current_environment)}/{self.solution_length}", flush=True)
+
 
 
     def initialize_population(self):
