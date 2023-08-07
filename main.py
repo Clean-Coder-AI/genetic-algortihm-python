@@ -10,7 +10,10 @@ if __name__ == "__main__":
     
     # Initialize the algorithm
     algorithm = HotColdAlgorithm(target_solution_length, population_size)
+<<<<<<< HEAD
     algorithm.run_algorithm(num_generations, print_stats=True)
+=======
+>>>>>>> 8efdd28eb5a8978d9a232790ebab8668f0ee4194
     
     # Lists to store average fitness values for each scenario over generations
     average_fitness_hot = []
@@ -65,4 +68,8 @@ if __name__ == "__main__":
     plt.ylabel('Fitness')
     plt.title('Tournament Selection Fitness Values')
     plt.legend()
+<<<<<<< HEAD
     plt.show()
+=======
+    plt.show()
+>>>>>>> 8efdd28eb5a8978d9a232790ebab8668f0ee4194
