@@ -5,12 +5,12 @@ from Population import Population
 
 class EvolutionApplication:
 
-    @staticmethod
+
     def main(args):
         print("STARTING THE APPLICATION")
         EvolutionApplication.run()
 
-    # @staticmethod
+
     # def run():
     #     print("EXECUTING:")
     #     population = Population(30, 20)
@@ -40,7 +40,6 @@ class EvolutionApplication:
             
     #         population = population.evolve_v2(climate, 0.03, random_selection_percentage)
 
-    @staticmethod
     def run():
         print("EXECUTING:")
         population = Population(30, 20)
@@ -57,12 +56,12 @@ class EvolutionApplication:
         with open('evolution.csv', mode='w', newline='') as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow([f"Random Selection Percentage: {random_percentage}%"])  # Write random percentage at the top
-            writer.writerow(["Climate: Hot" ])  # Empty row
+            writer.writerow(["Climate: Cold" ])  
             
             writer.writerow(["Generation", "Average Hot Fitness ", "Average Cold Fitness", "Fittest Hot", "Fittest Cold"])
 
             for i in range(30):
-                
+                # population = population.evolve_v2(cold, 0.03, random_percentage)
                 average_fitness_hot.append(population.get_average_fitness(hot))
                 average_fitness_cold.append(population.get_average_fitness(cold))
                 fittest_hot.append(population.get_fittest(hot).get_fitness(hot))
