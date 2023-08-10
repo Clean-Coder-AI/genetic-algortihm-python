@@ -55,10 +55,9 @@ class EvolutionApplication:
 
         with open('evolution.csv', mode='w', newline='') as csvfile:
             writer = csv.writer(csvfile)
-            writer.writerow([f"Random Selection Percentage: {random_percentage}%"])  # Write random percentage at the top
+            writer.writerow([f"Random Selection Percentage: {random_percentage:.2f}%"])  # Row for random selection percentage
             writer.writerow(["Climate: Cold" ])  
-            
-            writer.writerow(["Generation", "Average Hot Fitness ", "Average Cold Fitness", "Fittest Hot", "Fittest Cold"])
+            writer.writerow([f"Generation", "Average Hot Fitness", "Average Cold Fitness", "Fittest Hot", "Fittest Cold"])
 
             for i in range(30):
                 # population = population.evolve_v2(cold, 0.03, random_percentage)
