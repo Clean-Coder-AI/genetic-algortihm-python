@@ -65,15 +65,15 @@ class EvolutionApplication:
                 average_fitness_cold.append(population.get_average_fitness(cold))
                 fittest_hot.append(population.get_fittest(hot).get_fitness(hot))
                 fittest_cold.append(population.get_fittest(cold).get_fitness(cold))
-                population = population.evolve_v2(cold, 0.03, random_percentage)
+                population = population.evolve_v2(hot, 0.03, random_percentage)
 
                 writer.writerow([i, f"{average_fitness_hot[i]:.2f}", f"{average_fitness_cold[i]:.2f}", fittest_hot[i], fittest_cold[i]])
-                # ONLY FOR TESTING: Print the individuals in the population for the first two generations
-                if i < 2:
-                    print(f"Generation: {i+1}")
-                    for individual in population.get_individuals():
-                        print(individual)
-                    print("-----------------------------")
+                # # ONLY FOR TESTING: Print the individuals in the population for the first two generations
+                # if i < 2:
+                #     print(f"Generation: {i+1}")
+                #     for individual in population.get_individuals():
+                #         print(individual)
+                #     print("-----------------------------")
         print("done!")
 
 if __name__ == "__main__":
