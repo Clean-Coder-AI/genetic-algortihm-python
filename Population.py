@@ -3,8 +3,13 @@ from Individual import Individual,Climate
 from EvolutionTools import EvolutionTools
 
 class Population:
-    def __init__(self, population_size, number_of_genes):
-        self.individuals = [Individual(number_of_genes) for _ in range(population_size)]
+    def __init__(self, population_size=None, number_of_genes=None, individuals=None):
+        if individuals is not None:
+            self.individuals = individuals
+        elif population_size is not None and number_of_genes is not None:
+            self.individuals = [Individual(number_of_genes) for _ in range(population_size)]
+        else:
+            raise ValueError("Invalid arguments")
 
     def get_individuals(self):
         return self.individuals
@@ -62,7 +67,7 @@ class Population:
         # for individual in new_individuals:
         #     print(f"Genes: {individual.get_genes()}, Fitness: {individual.get_fitness(climate)}")
 
-        return Population(len(new_individuals), len(self.individuals[0].get_genes()))
+        return Population(individuals=new_individuals)
 
     def get_average_fitness(self, climate):
         total_fitness = sum(individual.get_fitness(climate) for individual in self.individuals)
