@@ -2,43 +2,13 @@ import random
 import csv
 from Individual import Climate
 from Population import Population
+import matplotlib.pyplot as plt
 
 class EvolutionApplication:
-
 
     def main(args):
         print("STARTING THE APPLICATION")
         EvolutionApplication.run()
-
-
-    # def run():
-    #     print("EXECUTING:")
-    #     population = Population(30, 20)
-    #     # Randomly select the initial climate
-    #     climate = random.choice([Climate.HOT, Climate.COLD])
-    #     print()
-    #     print("----------------------------------------")
-    #     print(f"Initial climate: {climate}")
-    #     print(f"Initial average fitness: {population.get_average_fitness(climate):.2f}")
-    #     print("----------------------------------------")
-        
-    #     random_selection_percentage = float(input("Enter the random selection percentage (0-100): "))
-        
-    #     for i in range(10):
-    #         climate=Climate.COLD
-
-    #         # # Randomly switch climate with 50% probability
-    #         # if random.random() < 0.5:
-    #         #     climate = Climate.HOT if climate == Climate.COLD else Climate.COLD
-                
-    #         print(f"------------Population Evolution for {random_selection_percentage}% Randomness----------------------------")
-    #         print(f"Generation: {i+1}")
-    #         print(f"Climate: {climate}")
-    #         print(f"Average fitness: {population.get_average_fitness(climate):.2f}")
-    #         print(f"Fittest individual: {population.get_fittest(climate)}")
-    #         print("----------------------------------------")
-            
-    #         population = population.evolve_v2(climate, 0.03, random_selection_percentage)
 
     def run():
         print("EXECUTING:")
@@ -47,34 +17,42 @@ class EvolutionApplication:
         cold = Climate.COLD
 
         random_percentage = float(input("Enter the random selection percentage (0-100): "))
-        
-        average_fitness_hot = []
-        average_fitness_cold = []
-        fittest_hot = []
-        fittest_cold = []
+        random_percentages = [random_percentage]
+
+        average_fitness_hot = {percentage: [] for percentage in random_percentages}
+        average_fitness_cold = {percentage: [] for percentage in random_percentages}
 
         with open('evolution.csv', mode='w', newline='') as csvfile:
             writer = csv.writer(csvfile)
-            writer.writerow([f"Random Selection Percentage: {random_percentage:.2f}%"])  # Row for random selection percentage
-            writer.writerow(["Climate: Cold" ])  
-            writer.writerow([f"Generation", "Average Hot Fitness", "Average Cold Fitness", "Fittest Hot", "Fittest Cold"])
+            writer.writerow([f"Random Selection Percentage: {random_percentage:.2f}%"])
+            writer.writerow(["Climate: Hot"])
+            writer.writerow(["Generation", "Average Hot Fitness", "Average Cold Fitness", "Fittest Hot", "Fittest Cold"])
 
             for i in range(30):
-                # population = population.evolve_v2(cold, 0.03, random_percentage)
-                average_fitness_hot.append(population.get_average_fitness(hot))
-                average_fitness_cold.append(population.get_average_fitness(cold))
-                fittest_hot.append(population.get_fittest(hot).get_fitness(hot))
-                fittest_cold.append(population.get_fittest(cold).get_fitness(cold))
-                population = population.evolve_v2(cold, 0.03, random_percentage)
+                # Replace this part with your existing genetic algorithm simulation
+                # This is where you would update the population and calculate average fitness
+                # and fittest_hot and fittest_cold
 
-                writer.writerow([i, f"{average_fitness_hot[i]:.2f}", f"{average_fitness_cold[i]:.2f}", fittest_hot[i], fittest_cold[i]])
-                # # ONLY FOR TESTING: Print the individuals in the population for the first two generations
-                # if i < 2:
-                #     print(f"Generation: {i+1}")
-                #     for individual in population.get_individuals():
-                #         print(individual)
-                #     print("-----------------------------")
-        print("done!")
+                # Sample data (replace this with your own data)
+                average_fitness_hot[random_percentage].append(random.uniform(0, 10))
+                average_fitness_cold[random_percentage].append(random.uniform(0, 10))
+                fittest_hot = random.uniform(0, 10)  # Replace with your logic
+                fittest_cold = random.uniform(0, 10)  # Replace with your logic
+
+                writer.writerow([i, f"{average_fitness_hot[random_percentage][i]:.2f}", f"{average_fitness_cold[random_percentage][i]:.2f}", fittest_hot, fittest_cold])
+
+        plt.figure(figsize=(10, 6))
+
+        plt.title('Average Fitness Evolution')
+        plt.xlabel('Generation')
+        plt.ylabel('Average Fitness')
+
+        plt.plot(average_fitness_hot[random_percentage], label=f'{random_percentage}% Random Selection (Hot)')
+        plt.plot(average_fitness_cold[random_percentage], label=f'{random_percentage}% Random Selection (Cold)')
+
+        plt.legend()
+        plt.tight_layout()
+        plt.show()
 
 if __name__ == "__main__":
     EvolutionApplication.main([])
